@@ -1,0 +1,100 @@
+-- all made by kezcn
+local h = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local freeze = Instance.new("TextButton")
+local hello = Instance.new("TextButton")
+
+--Properties:
+
+h.Name = "haha_yes"
+h.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+h.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+h.ResetOnSpawn = false
+
+Frame.Parent = h
+Frame.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
+Frame.Position = UDim2.new(0.705229819, 0, 0.500613511, 0)
+Frame.Selectable = true
+Frame.Size = UDim2.new(0, 346, 0, 159)
+
+freeze.Name = "freeze"
+freeze.Parent = Frame
+freeze.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+freeze.Position = UDim2.new(0, 0, 0.339622647, 0)
+freeze.Size = UDim2.new(0, 174, 0, 50)
+freeze.Font = Enum.Font.SourceSans
+freeze.Text = "freeze"
+freeze.TextColor3 = Color3.fromRGB(0, 0, 0)
+freeze.TextScaled = true
+freeze.TextSize = 14.000
+freeze.TextWrapped = true
+freeze.MouseButton1Down:connect(function()
+	game.Players.LocalPlayer.Character.Torso.Anchored = true
+	game.Players.LocalPlayer.Character.Head.Anchored = true
+end)
+hello.Name = "hello"
+hello.Parent = Frame
+hello.BackgroundColor3 = Color3.fromRGB(95, 255, 37)
+hello.Position = UDim2.new(0.546875, 0, 0.339622647, 0)
+hello.Size = UDim2.new(0, 156, 0, 50)
+hello.Font = Enum.Font.SourceSans
+hello.Text = "unfreeze"
+hello.TextColor3 = Color3.fromRGB(0, 0, 0)
+hello.TextScaled = true
+hello.TextSize = 14.000
+hello.TextWrapped = true
+--PASTE THE SCRIPT BELOW UNDER THE BUTTON.
+
+
+hello.MouseButton1Down:connect(function()
+	game.Players.LocalPlayer.Character.Torso.Anchored = false
+	game.Players.LocalPlayer.Character.Head.Anchored = false
+end)
+-- Scripts:
+
+local function IGJDR_fake_script() -- Frame.DraggableGUI 
+	local script = Instance.new('LocalScript', Frame)
+
+	local UserInputService = game:GetService("UserInputService")
+	
+	local gui = script.Parent
+	
+	local dragging
+	local dragInput
+	local dragStart
+	local startPos
+	
+	local function update(input)
+		local delta = input.Position - dragStart
+		gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	end
+	
+	gui.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = gui.Position
+			
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+	
+	gui.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+	
+	UserInputService.InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			if gui.Visible then
+				update(input)
+			end
+		end
+	end)
+end
+coroutine.wrap(IGJDR_fake_script)()
